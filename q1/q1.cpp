@@ -44,11 +44,37 @@ struct OutputRecord {
 using InputType = std::vector<struct InputRecord>;
 using OutputType = std::vector<struct OutputRecord>;
 
+struct AggEntry {
+    double sum_qty;
+    double sum_disc;
+    double sum_base_price;
+    double sum_disc_price;
+    double sum_charge;
+    int32_t count;
+};
+
 OutputType q1(const InputType &input) {
     OutputType output{};
 
+    struct AggEntry entry_map[sizeof(uint8_t) + sizeof(uint8_t)]{};
+
     for (const InputRecord &record : input) {
-        (void)record;
+        uint16_t idx = record.L_RETURNFLAG +
+            (static_cast<uint16_t>(record.L_LINESTATUS) << 8);
+        struct AggEntry *entry = &entry_map[idx];
+        entry->sum_qty += record.L_QUANTITY;
+        entry->sum_disc += record.L_DISCOUNT;
+
+        double ext_price = record.L_EXTENDEDPRICE;
+        entry->sum_base_price += ext_price;
+
+        ext_price *= (1 - record.L_DISCOUNT);
+        entry->sum_disc_price += ext_price;
+
+        ext_price *= (1 + record.L_TAX);
+        entry->sum_charge += ext_price;
+
+        entry->count++;
     }
 
     return output;
