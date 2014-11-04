@@ -7,8 +7,7 @@
 using identifier_t = uint32_t;
 using date_t = uint32_t; // XXX replace with boost gregorian
 
-struct LINEITEM_Record {
-    identifier_t L_ORDERKEY;
+struct InputRecord {
     identifier_t L_PARTKEY;
     identifier_t L_SUPPKEY;
     int32_t L_LINENUMBER;
@@ -42,10 +41,8 @@ struct OutputRecord {
     int32_t count_order;
 };
 
-using InputType = std::vector<struct LINEITEM_Record>;
-using InputRecord = InputType::value_type;
+using InputType = std::vector<struct InputRecord>;
 using OutputType = std::vector<struct OutputRecord>;
-using OutputRecord = OutputType::value_type;
 
 OutputType q1(const InputType &input) {
     OutputType output{};
