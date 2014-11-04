@@ -1,0 +1,1 @@
+c++ -g -Wall -Wextra -std=c++11  -c q1.cpp
