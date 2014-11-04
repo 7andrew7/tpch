@@ -30,8 +30,8 @@ struct InputRecord {
 };
 
 struct OutputRecord {
-    uint8_t l_returnflag;
-    uint8_t l_linestatus;
+    uint8_t l_return_flag;
+    uint8_t l_line_status;
     double sum_qty;
     double sum_base_price;
     double sum_disc_price;
@@ -78,6 +78,19 @@ OutputType q1(const InputType &input) {
         entry->count++;
     }
 
+    for (std::size_t i = 0; i < entry_map.size(); ++i) {
+        if (entry_map[i].count == 0)
+            continue;
+        AggEntry *entry = &entry_map[i];
+        uint8_t l_return_flag = i & 0xFF;
+        uint8_t l_line_status = (i >> 8) & 0xFF;
+
+        OutputRecord _or{l_return_flag, l_line_status, entry->sum_qty,
+            entry->sum_base_price, entry->sum_disc_price, entry->sum_charge,
+            entry->sum_qty / entry->count, entry->sum_base_price / entry->count,
+            entry->sum_disc / entry->count, entry->count};
+        output.push_back(_or);
+    }
 
     return output;
 }
