@@ -43,4 +43,16 @@ struct OutputRecord {
 };
 
 using InputType = std::vector<struct LINEITEM_Record>;
+using InputRecord = InputType::value_type;
 using OutputType = std::vector<struct OutputRecord>;
+using OutputRecord = OutputType::value_type;
+
+OutputType q1(const InputType &input) {
+    OutputType output{};
+
+    for (const InputRecord &record : input) {
+        (void)record;
+    }
+
+    return output;
+}
