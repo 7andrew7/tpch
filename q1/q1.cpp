@@ -1,4 +1,5 @@
 
+#include <array>
 #include <cstdint>
 #include <iostream>
 #include <string>
@@ -56,7 +57,7 @@ struct AggEntry {
 OutputType q1(const InputType &input) {
     OutputType output{};
 
-    struct AggEntry entry_map[sizeof(uint8_t) + sizeof(uint8_t)]{};
+    struct std::array<AggEntry, sizeof(uint8_t) + sizeof(uint8_t)> entry_map{};
 
     for (const InputRecord &record : input) {
         uint16_t idx = record.L_RETURNFLAG +
@@ -76,6 +77,7 @@ OutputType q1(const InputType &input) {
 
         entry->count++;
     }
+
 
     return output;
 }
