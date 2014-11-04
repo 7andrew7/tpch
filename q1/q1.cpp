@@ -19,5 +19,11 @@ struct LINEITEM_Record {
     uint8_t L_RETURNFLAG;
     uint8_t L_LINESTATUS;
 
-    
+    std::time_t L_SHIPDATE;
+    std::time_t L_COMMITDATE;
+    std::time_t L_RECEIPTDATE;
+
+    std::string L_SHIPINSTRUCT;
+    std::string L_SHIPMODE;
+    std::string L_COMMENT;
 };
