@@ -40,6 +40,21 @@ struct OutputRecord {
     double avg_price;
     double avg_disc;
     int32_t count_order;
+
+    OutputRecord(uint8_t l_return_flag, uint8_t l_line_status, double sum_qty,
+        double sum_base_price, double sum_disc_price,  double sum_charge,
+        double avg_qty, double avg_price, double avg_disc,
+        int32_t count_order):
+        l_return_flag{l_return_flag},
+        l_line_status{l_line_status},
+        sum_qty{sum_qty},
+        sum_base_price{sum_base_price},
+        sum_disc_price{sum_disc_price},
+        sum_charge{sum_charge},
+        avg_qty{avg_qty},
+        avg_price{avg_price},
+        avg_disc{avg_disc},
+        count_order{count_order} {}
 };
 
 using InputType = std::vector<struct InputRecord>;
@@ -85,11 +100,10 @@ OutputType q1(const InputType &input) {
         uint8_t l_return_flag = i & 0xFF;
         uint8_t l_line_status = (i >> 8) & 0xFF;
 
-        OutputRecord _or{l_return_flag, l_line_status, entry->sum_qty,
+        output.emplace_back(l_return_flag, l_line_status, entry->sum_qty,
             entry->sum_base_price, entry->sum_disc_price, entry->sum_charge,
             entry->sum_qty / entry->count, entry->sum_base_price / entry->count,
-            entry->sum_disc / entry->count, entry->count};
-        output.push_back(_or);
+            entry->sum_disc / entry->count, entry->count);
     }
 
     return output;
