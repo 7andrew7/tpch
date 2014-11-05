@@ -50,7 +50,16 @@ struct OutputRecord {
         avg_price{avg_price},
         avg_disc{avg_disc},
         count_order{count_order} {}
+
+    bool operator==(const OutputRecord &other) const {
+        return
+            sum_disc_price == other.sum_base_price &&
+            sum_disc_price == other.sum_disc_price;
+
+    }
 };
 
 using InputType = std::vector<struct InputRecord>;
 using OutputType = std::vector<struct OutputRecord>;
+
+OutputType q1(const InputType &input);
