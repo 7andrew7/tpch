@@ -1,5 +1,6 @@
 
 #include <array>
+#include <cassert>
 #include <cstdint>
 #include <iostream>
 #include <string>
@@ -72,7 +73,7 @@ struct AggEntry {
 OutputType q1(const InputType &input) {
     OutputType output{};
 
-    struct std::array<AggEntry, sizeof(uint8_t) + sizeof(uint8_t)> entry_map{};
+    struct std::array<AggEntry, sizeof(uint8_t) + sizeof(uint8_t)> entry_map;
 
     for (const InputRecord &record : input) {
         uint16_t idx = record.L_RETURNFLAG +
