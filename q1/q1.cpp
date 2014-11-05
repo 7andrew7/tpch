@@ -1,7 +1,6 @@
 
 #include <array>
 #include <cassert>
-#include <cstdint>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -17,10 +16,14 @@ struct AggEntry {
     int32_t count;
 };
 
+constexpr int num_values(int num_bytes) {
+    return 2 << (num_bytes * 8);
+}
+
 OutputType q1(const InputType &input) {
     OutputType output{};
 
-    struct std::array<AggEntry, sizeof(uint8_t) + sizeof(uint8_t)> entry_map;
+    struct std::array<AggEntry, num_values(sizeof(uint8_t) * 2)> entry_map;
 
     for (const InputRecord &record : input) {
         uint16_t idx = record.L_RETURNFLAG +
