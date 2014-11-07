@@ -11,11 +11,11 @@ void do_not_optimize_away(T&& datum) {
 }
 
 using val_type = int32_t;
-constexpr std::size_t vals_per_gigabyte = (1<<30 / sizeof(val_type));
+constexpr std::size_t vals_per_gigabyte = ((1<<30) / sizeof(val_type));
 
 static void array_sum(benchmark::State& state) {
-    constexpr auto N = vals_per_gigabyte;
-    std::array<int32_t, N> A;
+    constexpr auto N = 2 * vals_per_gigabyte;
+    int32_t *A = new int32_t[N];
 
     while (state.KeepRunning()) {
         int64_t sum = 0;
@@ -24,6 +24,8 @@ static void array_sum(benchmark::State& state) {
 
         do_not_optimize_away(sum);
     }
+
+    delete []A;
 }
 
 BENCHMARK(array_sum);
