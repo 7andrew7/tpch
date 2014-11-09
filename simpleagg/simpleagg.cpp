@@ -1,9 +1,9 @@
 
 #include <array>
 #include <cstdint>
+#include <chrono>
+#include <iostream>
 #include <random>
-
-#include <benchmark/benchmark.h>
 
 template <class T>
 void do_not_optimize_away(T&& datum) {
@@ -13,25 +13,26 @@ void do_not_optimize_away(T&& datum) {
 using val_type = int32_t;
 constexpr std::size_t vals_per_gigabyte = ((1<<30) / sizeof(val_type));
 
-static void array_sum(benchmark::State& state) {
-    constexpr auto N = 2 * vals_per_gigabyte;
+static void array_sum(void) {
+    constexpr auto N = 4 * vals_per_gigabyte;
     int32_t *A = new int32_t[N];
+    int64_t sum = 0;
 
-    while (state.KeepRunning()) {
-        int64_t sum = 0;
-        for (std::size_t i = 0; i < N; ++i)
-            sum += A[i];
+    auto start = std::chrono::system_clock::now();
 
-        do_not_optimize_away(sum);
-    }
+    for (std::size_t i = 0; i < N; ++i)
+        sum += A[i];
 
+    auto end = std::chrono::system_clock::now();
+
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
+
+    do_not_optimize_away(sum);
     delete []A;
 }
 
-BENCHMARK(array_sum);
-
-int main(int argc, const char** argv) {
-  benchmark::Initialize(&argc, argv);
-  benchmark::RunSpecifiedBenchmarks();
+int main() {
+  array_sum();
   return 0;
 }
